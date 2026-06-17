@@ -14,7 +14,7 @@ import java.util.Map;
 @Service
 public class LojaService {
 
-    @Value("${nuvemshop.client-id")
+    @Value("${nuvemshop.app-id}")
     private String clientId;
 
     @Value("${nuvemshop.client-secret}")
@@ -26,20 +26,28 @@ public class LojaService {
     @Autowired
     private LojaRepository lojaRepository;
 
+    public LojaService(RestClient.Builder builder, ObjectMapper objectMapper) {
+        this.restClient = builder.build();
+        this.objectMapper = objectMapper;
+    }
+
     public void trocarCodePorToken(String code, String state){
         Map<String, String> body = Map.of(
                 "client_id", clientId,
                 "client_secret", clientSecret,
-                "grant_type", "autorization_code",
+                "grant_type", "authorization_code",
                 "code", code
         );
-
+        System.out.println(clientId);
+        System.out.println(clientSecret);
         String response = restClient.post()
-                .uri("https://www.nuvemshop.com/apps/authorize/token")
+                .uri("https://www.tiendanube.com/apps/authorize/token")
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(body)
                 .retrieve()
                 .body(String.class);
+
+        System.out.println("RESPONSE NUVEMSHOP: " + response);
 
         Map<String, Object> json = objectMapper.readValue(response, Map.class);
 
