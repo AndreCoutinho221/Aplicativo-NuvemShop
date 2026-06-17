@@ -31,7 +31,7 @@ public class NuvemController {
         return "redirect:https://www.nuvemshop.com.br/apps/"+ appId +"/authorize";
     }
 
-    @GetMapping("/home")
+    @GetMapping("/casa")
     public String homeTemporaria(){
         return "home";
     }
