@@ -36,4 +36,9 @@ public class NuvemController {
     public String homeTemporaria(){
         return "home";
     }
+
+    @GetMapping("/")
+    public String home(){
+        return "home";
+    }
 }
