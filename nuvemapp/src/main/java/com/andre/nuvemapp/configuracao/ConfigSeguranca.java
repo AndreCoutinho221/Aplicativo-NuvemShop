@@ -13,20 +13,12 @@ public class ConfigSeguranca {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
         return http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/casa")
-                        .permitAll()
-                )
-                .logout(LogoutConfigurer::permitAll)
+                .csrf(csrf -> csrf.disable())
                 .build();
-
     }
 }
 
