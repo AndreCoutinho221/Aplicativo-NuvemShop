@@ -34,6 +34,6 @@ public class NuvemController {
 
     @GetMapping("/casa")
     public String homeTemporaria(){
-        return "redirect:/home.html";
+        return "home";
     }
 }
