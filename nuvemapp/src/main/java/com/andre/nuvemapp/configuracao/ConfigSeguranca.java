@@ -18,8 +18,6 @@ public class ConfigSeguranca {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")
-                        .loginProcessingUrl("/login")  // garante que o POST também é /login
                         .defaultSuccessUrl("/casa", true) // true força sempre ir para /casa
                         .failureUrl("/login?error=true")
                         .permitAll()
