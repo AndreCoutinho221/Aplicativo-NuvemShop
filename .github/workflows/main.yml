@@ -19,7 +19,15 @@ jobs:
           java-version: 21
 
       - name: Build
-        run: ./mvnw clean package -DskipTests
+        working-directory: nuvemapp
+        run: chmod +x mvnw && ./mvnw clean package -DskipTests
+
+      - name: Prepare artifact
+        working-directory: nuvemapp
+        run: |
+          JAR_FILE=$(find target -maxdepth 1 -name "*.jar" ! -name "*original*.jar" | head -n 1)
+          test -n "$JAR_FILE"
+          cp "$JAR_FILE" target/nuvemapp.jar
 
       - name: Copy jar to server
         uses: appleboy/scp-action@v0.1.7
@@ -27,7 +35,7 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "target/*.jar"
+          source: "nuvemapp/target/nuvemapp.jar"
           target: "/home/andre/app/"
 
       - name: Restart service
@@ -37,5 +45,6 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
+            set -e
             sudo systemctl restart spring-boot
             sudo systemctl status spring-boot --no-pager
