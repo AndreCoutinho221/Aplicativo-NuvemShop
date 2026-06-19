@@ -2,6 +2,7 @@ package com.andre.nuvemapp.service;
 
 import com.andre.nuvemapp.model.Loja;
 import com.andre.nuvemapp.repository.LojaRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -9,7 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import tools.jackson.databind.ObjectMapper;
 
+import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class LojaService {
@@ -31,7 +34,8 @@ public class LojaService {
         this.objectMapper = objectMapper;
     }
 
-    public void trocarCodePorToken(String code, String state){
+    @Transactional
+    public Map<String, Object> trocarCodePorToken(String code, String state){
         Map<String, String> body = Map.of(
                 "client_id", clientId,
                 "client_secret", clientSecret,
@@ -47,18 +51,33 @@ public class LojaService {
                 .retrieve()
                 .body(String.class);
 
-        System.out.println("RESPONSE NUVEMSHOP: " + response);
-
         Map<String, Object> json = objectMapper.readValue(response, Map.class);
 
-        Loja loja = new Loja();
-        String accessToken = (String) json.get("access_token");
-        Long userId = ((Number) json.get("user_id")).longValue();
-        String scope = (String) json.get("scope");
+        return json;
+    }
 
-        loja.setLoja_id(userId);
-        loja.setAcessToken(accessToken);
+    public boolean verificaCadastroLoja(String loja_id){
+        return lojaRepository.existsById(loja_id);
+    }
+
+
+    public void cadastraLoja(Map<String, Object> lojaJSON){
+        String access_token = (String) lojaJSON.get("access_token");
+        String loja_id = (String) lojaJSON.get("user_id");
+        String scope = (String) lojaJSON.get("scope");
+
+        Loja loja = new Loja();
+        loja.setAccessToken(access_token);
+        loja.setLoja_id(Long.parseLong(loja_id));
         loja.setScope(scope);
+        loja.setInstalledAt(LocalDateTime.now());
+        loja.setUpdatedAt(LocalDateTime.now());
         lojaRepository.save(loja);
+    }
+
+    @Transactional
+    public void atualizaLoja(String loja_id){
+        Loja loja = lojaRepository.findById(loja_id).orElseThrow();
+        loja.setUpdatedAt(LocalDateTime.now());
     }
 }

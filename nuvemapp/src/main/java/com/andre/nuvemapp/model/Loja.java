@@ -1,6 +1,5 @@
 package com.andre.nuvemapp.model;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -12,12 +11,13 @@ public class Loja {
     private Long loja_id;
 
     @Column(nullable = false, length = 255)
-    private String acessToken;
+    private String accessToken;
 
     private String scope;
 
     private LocalDateTime installedAt;
     private LocalDateTime updatedAt;
+
 
     public Loja(){}
 
@@ -27,14 +27,6 @@ public class Loja {
 
     public void setLoja_id(Long loja_id) {
         this.loja_id = loja_id;
-    }
-
-    public String getAcessToken() {
-        return acessToken;
-    }
-
-    public void setAcessToken(String acessToken) {
-        this.acessToken = acessToken;
     }
 
     public String getScope() {
@@ -53,11 +45,19 @@ public class Loja {
         this.installedAt = installedAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public LocalDateTime getUpdatedAt(LocalDateTime now) {
         return updatedAt;
     }
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 }
