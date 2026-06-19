@@ -42,8 +42,6 @@ public class LojaService {
                 "grant_type", "authorization_code",
                 "code", code
         );
-        System.out.println(clientId);
-        System.out.println(clientSecret);
         String response = restClient.post()
                 .uri("https://www.tiendanube.com/apps/authorize/token")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -52,7 +50,7 @@ public class LojaService {
                 .body(String.class);
 
         Map<String, Object> json = objectMapper.readValue(response, Map.class);
-
+        System.out.println(json);
         return json;
     }
 
@@ -61,23 +59,27 @@ public class LojaService {
     }
 
 
-    public void cadastraLoja(Map<String, Object> lojaJSON){
+    public Loja cadastraLoja(Map<String, Object> lojaJSON){
         String access_token = (String) lojaJSON.get("access_token");
-        String loja_id = (String) lojaJSON.get("user_id");
+        Integer loja_id = (Integer) lojaJSON.get("user_id");
         String scope = (String) lojaJSON.get("scope");
 
         Loja loja = new Loja();
         loja.setAccessToken(access_token);
-        loja.setLoja_id(Long.parseLong(loja_id));
+        loja.setLoja_id(Long.valueOf(loja_id));
         loja.setScope(scope);
         loja.setInstalledAt(LocalDateTime.now());
         loja.setUpdatedAt(LocalDateTime.now());
         lojaRepository.save(loja);
+
+        return loja;
     }
 
     @Transactional
-    public void atualizaLoja(String loja_id){
+    public Loja atualizaLoja(String loja_id){
         Loja loja = lojaRepository.findById(loja_id).orElseThrow();
         loja.setUpdatedAt(LocalDateTime.now());
+
+        return loja;
     }
 }

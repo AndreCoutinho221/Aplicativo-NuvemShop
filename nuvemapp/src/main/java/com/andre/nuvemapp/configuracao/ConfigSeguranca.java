@@ -6,11 +6,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 
 import javax.sql.DataSource;
 
@@ -19,52 +22,34 @@ import javax.sql.DataSource;
 public class ConfigSeguranca {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
-        return http
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/",
-                                "/css/**",
-                                "/js/**",
-                                "/images/**",
-                                "/oauth/nuvemshop/callback",
-                                "/integrations/nuvemshop/install")
-                        .permitAll()
-                        .anyRequest().authenticated()
-                )
-                .formLogin(form -> form
-                        .defaultSuccessUrl("/", true)
-                        .failureUrl("/login?error=true")
-                        .permitAll()
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout=true")
-                        .permitAll()
-                )
-                .build();
+    public SecurityContextRepository securityContextRepository() {
+        return new HttpSessionSecurityContextRepository();
     }
 
-
     @Bean
-    public UserDetailsService userDetailsService(DataSource dataSource) throws Exception{
-        JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
-
-        //Mapeia o id da loja para funcionar como login interno, a senha é definida no cadastro
-        users.setUsersByUsernameQuery(
-                "SELECT loja_id, senha, true FROM loja WHERE loja_id = ?"
-        );
-
-        //Seta por padrão o "ROLE_USER" para todas as lojas
-        users.setAuthoritiesByUsernameQuery(
-                "SELECT loja_id, 'ROLE_USER' FROM loja WHERE loja_id = ?"
-        );
-
-        return users;
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+        return http
+                .securityContext(sc ->
+                        sc.securityContextRepository(securityContextRepository()))
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                .formLogin(form -> form
+                        .loginPage("/")
+                        .defaultSuccessUrl("/sucesso")
+                )
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/integrations/nuvemshop/install",
+                                "/oauth/nuvemshop/callback",
+                                "/")
+                        .permitAll().anyRequest().authenticated())
+                .build();
     }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration){
             return authenticationConfiguration.getAuthenticationManager();
+
     }
 
 
