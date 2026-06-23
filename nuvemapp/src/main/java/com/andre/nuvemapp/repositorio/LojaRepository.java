@@ -1,6 +1,6 @@
-package com.andre.nuvemapp.repository;
+package com.andre.nuvemapp.repositorio;
 
-import com.andre.nuvemapp.model.Loja;
+import com.andre.nuvemapp.entidades.Loja;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
