@@ -1,0 +1,88 @@
+
+
+main{
+    background-color: #e1e1e1;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    font-family: Roboto, sans-serif;
+    min-height: 100vh;
+}
+
+.caixa-instalacao{
+    width: 33%;
+    height: 400px;
+    background: #ededed;
+    border-radius: 15px;
+    box-shadow: #474747 5px 5px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+h1{
+    font-size: 24pt;
+    text-align: center;
+    padding: 5px;
+    font-weight: normal;
+}
+
+p{
+    font-size: 16pt;
+    padding: 30px;
+    text-align: justify;
+}
+
+.container {
+    width: 400px;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.center {
+    width: 180px;
+    height: 60px;
+    position: absolute;
+}
+
+.btn {
+    width: 180px;
+    height: 60px;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid #717171;
+    outline: none;
+    transition: 1s ease-in-out;
+}
+
+svg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    fill: none;
+    stroke: #4f94d9;
+    stroke-dasharray: 150 480;
+    stroke-dashoffset: 150;
+    transition: 1s ease-in-out;
+}
+
+.btn:hover {
+    transition: 1s ease-in-out;
+    background: #ffffff;
+}
+
+.btn:hover svg {
+    stroke-dashoffset: -480;
+}
+
+.btn span {
+    color: #4e4e4e;
+    font-size: 18px;
+    font-weight: 100;
+}

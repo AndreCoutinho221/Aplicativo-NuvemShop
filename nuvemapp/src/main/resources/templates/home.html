@@ -4,10 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Instalar Integração</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-<button onclick="window.location.href='/integrations/nuvemshop/install'">
-    Instalar Integração
-</button>
+    <main>
+        <div class="caixa-instalacao">
+            <h1>Instalar plugin de acessibilidade na NuvemShop</h1>
+            <p>Ao clicar no botão abaixo você será redirecionado para a placaforma da NuvemShop, onde irá autorizar o aplicativo a acessar seu site</p>
+            <div class="container">
+                <div class="center">
+                    <button class="btn" onclick="window.location.href='/integrations/nuvemshop/install'">
+                        <svg width="180px" height="60px" viewBox="0 0 180 60" class="border">
+                            <polyline points="179,1 179,59 1,59 1,1 179,1" class="bg-line" />
+                            <polyline points="179,1 179,59 1,59 1,1 179,1" class="hl-line" />
+                        </svg>
+                        <span>Instalar Integração</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
 </body>
 </html>

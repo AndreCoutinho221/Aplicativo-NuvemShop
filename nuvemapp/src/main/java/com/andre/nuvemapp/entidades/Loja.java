@@ -1,4 +1,4 @@
-package com.andre.nuvemapp.model;
+package com.andre.nuvemapp.entidades;
 
 import jakarta.persistence.*;
 
@@ -8,6 +8,9 @@ import java.time.LocalDateTime;
 public class Loja {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id_interno;
+
     private Long loja_id;
 
     @Column(nullable = false, length = 255)
@@ -15,8 +18,8 @@ public class Loja {
 
     private String scope;
 
-    private LocalDateTime installedAt;
-    private LocalDateTime updatedAt;
+    private LocalDateTime instaladoEm;
+    private LocalDateTime atualizadoEm;
 
 
     public Loja(){}
@@ -37,20 +40,20 @@ public class Loja {
         this.scope = scope;
     }
 
-    public LocalDateTime getInstalledAt() {
-        return installedAt;
+    public LocalDateTime getInstaladoEm() {
+        return instaladoEm;
     }
 
-    public void setInstalledAt(LocalDateTime installedAt) {
-        this.installedAt = installedAt;
+    public void setInstaladoEm(LocalDateTime instaladoEm) {
+        this.instaladoEm = instaladoEm;
     }
 
     public LocalDateTime getUpdatedAt(LocalDateTime now) {
-        return updatedAt;
+        return atualizadoEm;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setAtualizadoEm(LocalDateTime atualizadoEm) {
+        this.atualizadoEm = atualizadoEm;
     }
 
     public String getAccessToken() {
@@ -59,5 +62,13 @@ public class Loja {
 
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
+    }
+
+    public Long getId_interno() {
+        return id_interno;
+    }
+
+    public void setId_interno(Long id_interno) {
+        this.id_interno = id_interno;
     }
 }
