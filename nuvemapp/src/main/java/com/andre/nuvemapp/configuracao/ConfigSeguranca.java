@@ -41,7 +41,8 @@ public class ConfigSeguranca {
                         .requestMatchers(
                                 "/integrations/nuvemshop/install",
                                 "/oauth/nuvemshop/callback",
-                                "/")
+                                "/",
+                                "/css/styles.css")
                         .permitAll().anyRequest().authenticated())
                 .build();
     }
