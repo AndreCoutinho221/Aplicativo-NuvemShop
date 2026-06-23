@@ -1,7 +1,7 @@
 package com.andre.nuvemapp.controller;
 
 import com.andre.nuvemapp.model.Loja;
-import com.andre.nuvemapp.model.LojaPrincipal;
+import com.andre.nuvemapp.model.LojaAutenticacao;
 import com.andre.nuvemapp.service.LojaService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -53,27 +53,11 @@ public class NuvemController {
             HttpServletResponse response) throws IOException {
 
         //Troca o code recebido da NuvemShop por um token e as informações da loja
-        Map<String, Object> lojaJSON = lojaService.trocarCodePorToken(code, state);
-        System.out.println(lojaJSON);
-        Integer id = (Integer) lojaJSON.get("user_id");
-        String loja_id = id.toString();
-        Loja loja;
-        //Cadastra a loja ou atualiza caso ja esteja cadastrada
-        if (!lojaService.verificaCadastroLoja(loja_id)){
-            loja = lojaService.cadastraLoja(lojaJSON);
-        } else {
-            loja = lojaService.atualizaLoja(loja_id);
-        }
-
-        LojaPrincipal principal = new LojaPrincipal(
-                loja.getLoja_id(),
-                loja.getLoja_id(),
-                loja.getAccessToken()
-        );
+        LojaAutenticacao lojaValidada = lojaService.validarLoja(code, state);
 
         Authentication authentication =
                 new UsernamePasswordAuthenticationToken(
-                    principal,
+                    lojaValidada,
                     null,
                     List.of(new SimpleGrantedAuthority("ROLE_STORE"))
                 );

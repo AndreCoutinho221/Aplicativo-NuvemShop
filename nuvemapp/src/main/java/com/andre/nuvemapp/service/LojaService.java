@@ -1,6 +1,7 @@
 package com.andre.nuvemapp.service;
 
 import com.andre.nuvemapp.model.Loja;
+import com.andre.nuvemapp.model.LojaAutenticacao;
 import com.andre.nuvemapp.repository.LojaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,26 @@ public class LojaService {
     }
 
     @Transactional
+    public LojaAutenticacao validarLoja(String code, String state){
+        Map<String, Object> lojaJSON = trocarCodePorToken(code, state);
+
+        Integer id = (Integer) lojaJSON.get("user_id");
+        String loja_id = id.toString();
+        Loja loja;
+
+        //Cadastra a loja ou atualiza caso ja esteja cadastrada
+        if (!verificaCadastroLoja(loja_id)){
+            loja = cadastraLoja(lojaJSON);
+        } else {
+            loja = atualizaLoja(loja_id);
+        }
+
+        return new LojaAutenticacao(
+                loja.getId_interno(),
+                loja.getLoja_id()
+        );
+    }
+
     public Map<String, Object> trocarCodePorToken(String code, String state){
         Map<String, String> body = Map.of(
                 "client_id", clientId,
@@ -50,7 +71,6 @@ public class LojaService {
                 .body(String.class);
 
         Map<String, Object> json = objectMapper.readValue(response, Map.class);
-        System.out.println(json);
         return json;
     }
 

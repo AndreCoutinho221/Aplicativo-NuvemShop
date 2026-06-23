@@ -2,12 +2,16 @@ package com.andre.nuvemapp.model;
 
 import jakarta.persistence.*;
 
+import javax.annotation.processing.Generated;
 import java.time.LocalDateTime;
 
 @Entity
 public class Loja {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id_interno;
+
     private Long loja_id;
 
     @Column(nullable = false, length = 255)
@@ -59,5 +63,13 @@ public class Loja {
 
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
+    }
+
+    public Long getId_interno() {
+        return id_interno;
+    }
+
+    public void setId_interno(Long id_interno) {
+        this.id_interno = id_interno;
     }
 }
